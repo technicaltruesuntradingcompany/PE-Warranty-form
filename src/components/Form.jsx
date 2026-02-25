@@ -121,8 +121,8 @@ export default function FormPage() {
         const { name, value } = e.target;
         let sanitizedValue = value;
 
-        // Validation: Only numbers for phone fields
-        if (["contactNo", "customerContact", "customerAlternate"].includes(name)) {
+        // Validation: Only numbers for integrator phone
+        if (name === "contactNo") {
             sanitizedValue = value.replace(/[^0-9]/g, "");
         }
 
@@ -731,4 +731,3 @@ export default function FormPage() {
         </div >
     );
 }
-
