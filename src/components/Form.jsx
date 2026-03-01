@@ -27,22 +27,33 @@ const PRIMARY_COLOR = "#0F40C5"; // Coral
 // --- Helper Components ---
 
 // Moved Input outside to prevent re-mounting (and focus loss) on every render
-const Input = ({ label, name, type = "text", required = false, value, onChange, disabled, autoComplete }) => (
+const Input = ({ label, name, type = "text", required = false, value, onChange, disabled, autoComplete, onFocus, onBlur, showTooltip, tooltipText }) => (
     <div className="flex flex-col">
         <label className="text-sm font-medium text-slate-700 mb-1">
             {label} {required && <span className="text-red-500">*</span>}
         </label>
-        <input
-            type="text"
-            name={name}
-            required={required}
-            value={value}
-            onChange={onChange}
-            disabled={disabled}
-            className="rounded-lg border border-slate-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0F40C5]/20 focus:border-[#0F40C5] transition-all disabled:bg-gray-50 disabled:text-gray-400"
-            placeholder={label}
-            autoComplete={autoComplete}
-        />
+        <div className="relative flex flex-col">
+            {showTooltip && (
+                <div className="absolute bottom-full left-0 mb-3 bg-[#0F40C5] text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-2xl z-20 animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-center gap-2 whitespace-nowrap border border-blue-400">
+                    <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs pb-[1px]">!</span>
+                    {tooltipText}
+                    <div className="absolute -bottom-1.5 left-5 w-3 h-3 bg-[#0F40C5] rotate-45 border-b border-r border-blue-400"></div>
+                </div>
+            )}
+            <input
+                type={type}
+                name={name}
+                required={required}
+                value={value}
+                onChange={onChange}
+                disabled={disabled}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                className="rounded-lg border border-slate-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0F40C5]/20 focus:border-[#0F40C5] transition-all disabled:bg-gray-50 disabled:text-gray-400 w-full"
+                placeholder={label}
+                autoComplete={autoComplete}
+            />
+        </div>
     </div>
 );
 
@@ -96,6 +107,7 @@ export default function FormPage() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [addressHints, setAddressHints] = useState({ office: false, site: false });
 
     // --- Form State ---
     const [formData, setFormData] = useState({
@@ -578,6 +590,10 @@ export default function FormPage() {
                                 value={formData.officeAddress}
                                 onChange={handleChange}
                                 disabled={isSubmitting}
+                                onFocus={() => setAddressHints(prev => ({ ...prev, office: true }))}
+                                onBlur={() => setAddressHints(prev => ({ ...prev, office: false }))}
+                                showTooltip={addressHints.office}
+                                tooltipText="A full address is required, including the pincode."
                             />
                             <Input
                                 label="Contact Person"
@@ -620,6 +636,10 @@ export default function FormPage() {
                                     value={formData.customerProjectSite}
                                     onChange={handleChange}
                                     disabled={isSubmitting}
+                                    onFocus={() => setAddressHints(prev => ({ ...prev, site: true }))}
+                                    onBlur={() => setAddressHints(prev => ({ ...prev, site: false }))}
+                                    showTooltip={addressHints.site}
+                                    tooltipText="A full address is required, including the pincode."
                                 />
                             </div>
                             <Input
