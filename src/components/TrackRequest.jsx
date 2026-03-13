@@ -22,7 +22,7 @@ const TrackRequest = () => {
         setSearched(false);
 
         try {
-            const response = await fetch(`https://ninja-penguin-backend-1.onrender.com/api/requests/${requestId.trim()}`);
+            const response = await fetch(`https://pe-warranty-backend.onrender.com/api/requests/${requestId.trim()}`);
 
             if (response.ok) {
                 const data = await response.json();
@@ -168,4 +168,5 @@ const TrackRequest = () => {
 };
 
 export default TrackRequest;
+
 
