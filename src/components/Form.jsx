@@ -375,10 +375,12 @@ export default function FormPage() {
         e.preventDefault();
 
         // VALIDATION: Check if exactly two images are uploaded
-        if (previewImages.length !== 2) {
-            alert("Please upload exactly 2 site pictures to proceed.");
-            return;
-        }
+        // Use it when you have to check whether the uploaded files count is exactly two
+        
+        // if (previewImages.length !== 2) {
+        //     alert("Please upload exactly 2 site pictures to proceed.");
+        //     return;
+        // }
 
         // VALIDATION: Check for placeholder keys
         const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
